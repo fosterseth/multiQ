@@ -63,13 +63,63 @@ for (w = 0; w < websites.length; w++) {
 
 var search_box = document.getElementById("search_box");
 
+    document.getElementById("toadd_button").addEventListener("click", addQuery);
+
+    function addQuery() {
+        let url = document.getElementById("toadd_url_result").value;
+        let item = document.getElementById("toadd_search_item").value;
+        let itemEncode = encodeURIComponent(item);
+        let query = parseQuery(url, itemEncode);
+        if (query.length === 1) {
+            let itemEncodePlus = itemEncode.replace('%20', '+');
+            query = parseQuery(url, itemEncodePlus);
+            if (query.length === 1) {
+                console.log("fail to parse");
+                console.log(query);
+            }
+        }
+
+        console.log(query);
+    }
+
+    function parseQuery(url, item) {
+        let res = [];
+        let i = 0;
+        while (i < url.length) {
+            var start = findFirstItem(url, item, i);
+            if (start === -1) {
+                break;
+            }
+            var end = start + item.length;
+            res.push(url.substring(i, start));
+            i = end;
+        }
+        res.push(url.substring(i));
+        return res;
+    }
+
+
+    function findFirstItem(url, item, idx) {
+        while (idx < url.length) {
+            var start = url.indexOf('=' + item, idx);
+            if (start === -1) {
+                return -1;
+            }
+            var end = start + 1 + item.length;
+            if (url.length === end || url[end] === '&') {
+                return start + 1;
+            }
+            idx = end;
+        }
+        return -1;
+    }
 }
 
 </script>
 <body>
 <div>
 <input type="text" id="toadd_url_result">
-<input type="text" id="toadd_search_param">
+<input type="text" id="toadd_search_item">
 <button type="button" id="toadd_button">Add Query</button>
 </div>
 <div>
