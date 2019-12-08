@@ -21,10 +21,31 @@ function join_query(q, text_to_insert) {
 document.getElementById("search_box").value = "rtx 2080";
 div_websites = document.getElementById("divwebsites");
 
+class QueryEntry{
+  constructor(name, url){
+    this.name = name;
+    this.url = url;
+  }
+  print_QueryEntry(){
+    console.log(this.name);
+  }
+
+  open_tab(){
+    openInNewTab(join_query(this.url, "chair"))
+  }
+}
+
+function query_entry_onclick(){
+  openInNewTab(join_query())
+
+}
 function add_website(v){
 	var entry_div = document.createElement("div");
-  entry_div.setAttribute("class", "query_entry")
+  entry_div.setAttribute("class", "query_entry");
   entry_div.innerHTML = v.name;
+  entry_div.object = new QueryEntry(v.name, v.url);
+  entry_div.object.print_QueryEntry();
+  entry_div.addEventListener("click", function(){entry_div.object.open_tab()});
 	div_websites.appendChild(entry_div);
 }
 
@@ -41,18 +62,6 @@ for (w = 0; w < websites.length; w++) {
 
 
 var search_box = document.getElementById("search_box");
-search_box
-    .addEventListener("keyup", function(event) {
-    event.preventDefault();
-    if (event.keyCode === 13) {
-        for (w = 0; w < websites.length; w++) {
-			var entry_checkbox = document.getElementById(websites[w].name);
-			if (entry_checkbox.checked) {
-				openInNewTab(join_query(websites[w].url, search_box.value));
-			}
-		}
-    }
-});
 
 }
 
