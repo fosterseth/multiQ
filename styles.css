@@ -1,0 +1,17 @@
+body {
+  background: #2d324f;
+
+}
+
+input {
+  background-color: #5d6070;
+  color: #ffffff;
+  border-width:0px;
+  border:none;
+  font-size: 30px;
+}
+
+.query_entry {
+  font-size:30px;
+  color: #ffffff;
+}

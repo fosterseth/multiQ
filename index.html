@@ -1,5 +1,8 @@
 
 <html>
+<head>
+  <link rel="stylesheet" href="styles.css">
+</head>
 <script>
 window.onload = function(){
 
@@ -17,20 +20,12 @@ function join_query(q, text_to_insert) {
 
 document.getElementById("search_box").value = "rtx 2080";
 div_websites = document.getElementById("divwebsites");
+
 function add_website(v){
 	var entry_div = document.createElement("div");
+  entry_div.setAttribute("class", "query_entry")
+  entry_div.innerHTML = v.name;
 	div_websites.appendChild(entry_div);
-
-	var checkbox = document.createElement("input");
-	checkbox.type = "checkbox";
-	checkbox.id = v.name;
-	checkbox.checked = 1;
-
-	var label = document.createElement("label");
-	label.appendChild(document.createTextNode(v.name));
-
-	entry_div.appendChild(checkbox);
-	entry_div.appendChild(label);
 }
 
 var websites = [
@@ -63,9 +58,11 @@ search_box
 
 </script>
 <body>
+<div>
 <input type="text" id="toadd_url_result">
 <input type="text" id="toadd_search_param">
 <button type="button" id="toadd_button">Add Query</button>
+</div>
 <div>
 <input type="text" id="search_box">
 </div>
