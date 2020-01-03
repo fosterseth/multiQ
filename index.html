@@ -34,6 +34,10 @@ window.onload = function(){
         var search_box = document.getElementById("search_box");
         openInNewTab(join_query(this.url, search_box.value))
       }
+
+      close_entry(){
+        
+      }
     }
 
     function query_entry_onclick(){
@@ -41,13 +45,22 @@ window.onload = function(){
 
     }
     function add_website(v){
+      var label_x = document.createElement("div");
+      var x = document.createElement("div");
+
     	var entry_div = document.createElement("div");
       entry_div.setAttribute("class", "query_entry");
       entry_div.innerHTML = v.name;
       entry_div.object = new QueryEntry(v.name, v.url);
       entry_div.object.print_QueryEntry();
       entry_div.addEventListener("click", function(){entry_div.object.open_tab()});
-    	div_websites.appendChild(entry_div);
+    	label_x.appendChild(entry_div);
+
+      x.innerHTML = "&times";
+      x.addEventListener("click", function(){x.object})
+
+
+      div_websites.appendChild(label_x);
     }
 
     var websites = [
@@ -57,8 +70,15 @@ window.onload = function(){
     	{name: "Bestbuy", url: ["https://www.bestbuy.com/site/searchpage.jsp?_dyncharset=UTF-8&id=pcat17071&iht=y&keys=keys&ks=960&list=n&qp=category_facet%3DAll%20Desktops~pcmcat143400050013&sc=Global&sp=%2Bcurrentprice%20skuidsaas&st=", "&type=page&usc=All%20Categories"]},
     	];
 
-    for (w = 0; w < websites.length; w++) {
-    	add_website(websites[w]);
+    try {
+      var store = JSON.parse(localStorage.getItem('localstorage'));
+    }
+    catch (err){
+      localStorage.setItem('localstorage', JSON.stringify(websites));
+      var store = JSON.parse(localStorage.getItem('localstorage'));
+    }
+    for (w = 0; w < store.length; w++) {
+    	add_website(store[w]);
     }
 
     document.getElementById("toadd_button").addEventListener("click", addQuery);
@@ -66,6 +86,7 @@ window.onload = function(){
     function addQuery() {
         let url = document.getElementById("toadd_url_result").value;
         let item = document.getElementById("toadd_search_item").value;
+        let label = document.getElementById("toadd_label").value;
         let itemEncode = encodeURIComponent(item);
         let query = parseQuery(url, itemEncode);
         if (query.length === 1) {
@@ -78,7 +99,10 @@ window.onload = function(){
         }
 
         console.log(query);
-        add_website({name: "foobar", url: query});
+        var dic = {name: label, url: query};
+        store.push(dic)
+        localStorage.setItem('localstorage', JSON.stringify(store));
+        add_website(dic);
     }
 
     function parseQuery(url, item) {
@@ -119,9 +143,10 @@ window.onload = function(){
 <div>
 <input type="text" id="toadd_url_result">
 <input type="text" id="toadd_search_item">
+<input type="text" id="toadd_label">
 <button type="button" id="toadd_button">Add Query</button>
 </div>
-<div>
+<div id="div_search_box">
 <input type="text" id="search_box">
 </div>
 <div id="divwebsites">
